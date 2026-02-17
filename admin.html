@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gerenciar Links</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>⚙️ Painel Administrativo</h1>
+            <a href="index.html" class="btn-secondary">← Ver Site</a>
+        </div>
+
+        <!-- Login -->
+        <div id="loginSection" class="login-section">
+            <h2>Login</h2>
+            <input type="password" id="adminPassword" placeholder="Senha de admin">
+            <button onclick="LinkApp.login()" class="btn-primary">Entrar</button>
+            <p class="hint">Senha padrão: admin123 (mude no código)</p>
+        </div>
+
+        <!-- Painel de Controle -->
+        <div id="adminPanel" class="admin-panel hidden">
+            
+            <!-- Adicionar Novo Link -->
+            <div class="add-link-section">
+                <h2>➕ Adicionar Novo Link</h2>
+                <input type="text" id="newTitle" placeholder="Título do link">
+                <input type="url" id="newUrl" placeholder="https://exemplo.com">
+                <input type="text" id="newIcon" placeholder="Emoji ícone (ex: 🚀)">
+                <input type="text" id="newColor" placeholder="Cor (ex: #ff6b6b ou deixe vazio)">
+                <button onclick="LinkApp.addLink()" class="btn-primary">Adicionar Link</button>
+            </div>
+
+            <!-- Lista de Links -->
+            <div class="manage-links">
+                <h2>📋 Meus Links</h2>
+                <div id="adminLinksList" class="admin-links-list">
+                    <!-- Links serão listados aqui -->
+                </div>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-section">
+                <h2>📊 Estatísticas</h2>
+                <div id="statsContainer" class="stats-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            LinkApp.checkLogin();
+        });
+    </script>
+</body>
+</html>
