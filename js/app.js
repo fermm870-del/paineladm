@@ -1,7 +1,7 @@
 const LinkApp = {
     // Configurações
     config: {
-        adminPassword: 'admin123', // ALTERE SUA SENHA AQUI
+        adminPassword: 'Jovemrico31', // ALTERE SUA SENHA AQUI
         storageKey: 'meusLinks_data',
         sessionKey: 'admin_session'
     },
