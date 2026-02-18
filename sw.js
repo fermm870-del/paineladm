@@ -1,11 +1,21 @@
-const CACHE_NAME = 'meus-links-v2';
+const CACHE_NAME = 'meus-links-v3';
+const BASE_PATH = '/paineladm/';
+
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/admin.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json'
+  BASE_PATH,
+  BASE_PATH + 'index.html',
+  BASE_PATH + 'admin.html',
+  BASE_PATH + 'css/style.css',
+  BASE_PATH + 'js/app.js',
+  BASE_PATH + 'manifest.json',
+  BASE_PATH + 'icons/icon-72x72.png',
+  BASE_PATH + 'icons/icon-96x96.png',
+  BASE_PATH + 'icons/icon-128x128.png',
+  BASE_PATH + 'icons/icon-144x144.png',
+  BASE_PATH + 'icons/icon-152x152.png',
+  BASE_PATH + 'icons/icon-192x192.png',
+  BASE_PATH + 'icons/icon-384x384.png',
+  BASE_PATH + 'icons/icon-512x512.png'
 ];
 
 // Instalação
@@ -21,7 +31,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Ativação (limpa caches antigos)
+// Ativação
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -35,29 +45,18 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch (estratégia: Cache First, depois Network)
+// Fetch - Estratégia Cache First
 self.addEventListener('fetch', (event) => {
   // Ignora requisições não-GET
   if (event.request.method !== 'GET') return;
   
-  // Ignora requisições de analytics/externas
+  // Ignora requisições de outros domínios
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         if (response) {
-          // Retorna do cache mas atualiza em background
-          fetch(event.request)
-            .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200) {
-                caches.open(CACHE_NAME).then((cache) => {
-                  cache.put(event.request, networkResponse.clone());
-                });
-              }
-            })
-            .catch(() => {});
-          
           return response;
         }
 
@@ -73,39 +72,13 @@ self.addEventListener('fetch', (event) => {
             });
 
             return networkResponse;
+          })
+          .catch(() => {
+            // Fallback para offline
+            if (event.request.mode === 'navigate') {
+              return caches.match(BASE_PATH + 'index.html');
+            }
           });
       })
-      .catch(() => {
-        // Fallback para offline
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      })
-  );
-});
-
-// Background Sync (para quando voltar online)
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-links') {
-    event.waitUntil(syncLinks());
-  }
-});
-
-async function syncLinks() {
-  // Sincronização de dados quando voltar online
-  console.log('Sincronizando links...');
-}
-
-// Push Notifications (preparado para futuro)
-self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data?.text() || 'Nova atualização!',
-    icon: 'icons/icon-192x192.png',
-    badge: 'icons/icon-72x72.png',
-    vibrate: [100, 50, 100]
-  };
-  
-  event.waitUntil(
-    self.registration.showNotification('Meus Links', options)
   );
 });
