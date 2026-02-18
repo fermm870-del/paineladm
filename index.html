@@ -12,18 +12,18 @@
     <title>Meus Links</title>
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/paineladm/manifest.json">
     
     <!-- Icons -->
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/paineladm/icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/paineladm/icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="/paineladm/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/paineladm/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/paineladm/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/paineladm/icons/icon-192x192.png">
     
-    <!-- Styles - CAMINHO CORRIGIDO -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="/paineladm/css/style.css">
 </head>
 <body>
     <div class="app-container">
@@ -65,7 +65,7 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-            <a href="admin.html" class="admin-link">
+            <a href="/paineladm/admin.html" class="admin-link">
                 <span>⚙️</span>
                 <span>Admin</span>
             </a>
@@ -79,19 +79,21 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Scripts - CAMINHO CORRIGIDO -->
-    <script src="js/app.js"></script>
+    <!-- Scripts -->
+    <script src="/paineladm/js/app.js"></script>
     <script>
-        // Register Service Worker - CAMINHO CORRIGIDO
+        // Register Service Worker com escopo correto
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('SW registrado:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('SW falhou:', error);
-                    });
+                navigator.serviceWorker.register('/paineladm/sw.js', {
+                    scope: '/paineladm/'
+                })
+                .then(registration => {
+                    console.log('SW registrado:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('SW falhou:', error);
+                });
             });
         }
 
