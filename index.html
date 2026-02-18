@@ -2,32 +2,102 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Meus Links">
+    <meta name="description" content="Todos os meus links em um só lugar">
+    
     <title>Meus Links</title>
-    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="profile">
-            <div class="avatar">👤</div>
-            <h1>Meus Projetos</h1>
-            <p>Todos os meus links em um só lugar</p>
-        </div>
-        
-        <div class="links-container" id="linksContainer">
-            <!-- Links serão carregados aqui via JavaScript -->
-        </div>
-        
-        <footer>
-            <a href="admin.html" class="admin-link">⚙️ Admin</a>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="avatar">
+                    <span>👤</span>
+                </div>
+                <h1>Meus Projetos</h1>
+                <p class="subtitle">Todos os links em um só lugar</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Search -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar link..." autocomplete="off">
+            </div>
+
+            <!-- Links Grid -->
+            <div class="links-grid" id="linksContainer">
+                <!-- Links gerados via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <span class="empty-icon">🔍</span>
+                <p>Nenhum link encontrado</p>
+            </div>
+        </main>
+
+        <!-- Install Button (PWA) -->
+        <button class="install-btn" id="installBtn" style="display: none;">
+            <span>📲</span>
+            <span>Instalar App</span>
+        </button>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <a href="admin.html" class="admin-link">
+                <span>⚙️</span>
+                <span>Admin</span>
+            </a>
+            <div class="offline-indicator" id="offlineIndicator" style="display: none;">
+                <span>📴</span>
+                <span>Offline</span>
+            </div>
         </footer>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
     <script>
-        // Carrega links na página pública
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registrado:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('SW falhou:', error);
+                    });
+            });
+        }
+
+        // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
-            LinkApp.renderPublicLinks();
+            LinkApp.init();
         });
     </script>
 </body>
